@@ -1,14 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   Button,
   DialogActions,
-  Alert,
-  CircularProgress,
 } from "@mui/material";
-import { CheckCircle, Error, Sync } from "@mui/icons-material";
+import { Sync } from "@mui/icons-material";
 import { useForm, FormProvider } from "react-hook-form";
 import { CippFormTenantSelector } from "./CippFormTenantSelector";
 import { ApiPostCall } from "/src/api/ApiCall";
@@ -27,22 +25,16 @@ export const BPASyncDialog = ({ createDialog }) => {
   // Use methods for form handling and control
   const { handleSubmit, control } = methods;
 
-  const [tenantId, setTenantId] = useState("");
   const [isSyncing, setIsSyncing] = useState(false);
-
-  // Use ApiGetCall instead of useApiCall
   const bpaSyncResults = ApiPostCall({
-    urlfromdata: true,
+    urlFromData: true,
   });
 
   const handleForm = (values) => {
-    setTenantId(values.tenantFilter || "");
-    setIsSyncing(true);
-
     bpaSyncResults.mutate({
       url: "/api/ExecBPA",
-      queryKey: `bpa-sync-${tenantId}`,
-      data: tenantId ? { TenantFilter: tenantId } : {},
+      queryKey: `bpa-sync-${values.tenantFilter}`,
+      data: values.tenantFilter ? { TenantFilter: values.tenantFilter } : {},
     });
   };
 
